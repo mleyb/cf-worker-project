@@ -1,0 +1,29 @@
+service: cf-worker-project
+
+useDotenv: true
+
+frameworkVersion: '2'
+
+provider:
+  name: cloudflare
+  config:
+    accountId: ${file(./config/envVars.js):getEnvVars.cloudflareAccountId}
+    zoneId: ${file(./config/envVars.js):getEnvVars.cloudflareZoneId}
+  environment:
+    CLOUDFLARE_AUTH_KEY: ${file(./config/envVars.js):getEnvVars.cloudflareAuthKey}
+    CLOUDFLARE_AUTH_EMAIL: ${file(./config/envVars.js):getEnvVars.cloudflareAuthEmail}
+
+plugins:
+  - serverless-cloudflare-workers
+
+functions:
+  hello:
+    name: hello
+    script: helloWorld # there must be a file called helloWorld.js
+    events:
+      - http:
+          url: mleyb.uk/hello/*
+          method: GET
+          headers:
+            foo: bar
+            x-client-data: value
