@@ -3,5 +3,7 @@ addEventListener('fetch', (event) => {
 });
 
 async function handleRequest(request) {
-  return new Response('Hello world');
+  const greeting = await ENV.get("GREETING");
+
+  return new Response(greeting);
 }

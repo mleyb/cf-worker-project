@@ -7,22 +7,26 @@ frameworkVersion: '2'
 provider:
   name: cloudflare
   config:
-    accountId: ${file(./config/envVars.js):getEnvVars.cloudflareAccountId}
-    zoneId: ${file(./config/envVars.js):getEnvVars.cloudflareZoneId}
+    accountId: ${env:CLOUDFLARE_ACCOUNT_ID}
+    zoneId: ${env:CLOUDFLARE_ZONE_ID}
   environment:
-    CLOUDFLARE_AUTH_KEY: ${file(./config/envVars.js):getEnvVars.cloudflareAuthKey}
-    CLOUDFLARE_AUTH_EMAIL: ${file(./config/envVars.js):getEnvVars.cloudflareAuthEmail}
+    CLOUDFLARE_AUTH_KEY: ${env:CLOUDFLARE_AUTH_KEY}
+    CLOUDFLARE_AUTH_EMAIL: ${env:CLOUDFLARE_AUTH_EMAIL}
 
 plugins:
   - serverless-cloudflare-workers
 
 functions:
-  hello:
-    name: hello
-    script: helloWorld # there must be a file called helloWorld.js
+  greet:
+    name: greet
+    script: handlers/worker # worker.js
+    resources:
+      kv:
+        - variable: ENV
+          namespace: ENV
     events:
       - http:
-          url: mleyb.uk/hello/*
+          url: mleyb.uk/greet/*
           method: GET
           headers:
             foo: bar
