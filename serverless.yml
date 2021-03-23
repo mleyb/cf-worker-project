@@ -1,8 +1,12 @@
 service: cf-worker-project
 
-useDotenv: true
-
 frameworkVersion: '2'
+
+package:
+  exclude:
+    - .github/**
+
+useDotenv: true
 
 provider:
   name: cloudflare
@@ -19,7 +23,7 @@ plugins:
 functions:
   greet:
     name: greet
-    script: handlers/worker # worker.js
+    script: dist/worker # worker.js
     resources:
       kv:
         - variable: ENV
